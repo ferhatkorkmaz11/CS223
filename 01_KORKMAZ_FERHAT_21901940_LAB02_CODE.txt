@@ -1,0 +1,108 @@
+module fulladder(input logic x, y, cin, output logic sum, cout);
+
+    assign cout = (x & y) | ((x ^ y) & cin);
+    assign sum =  cin ^ (x ^ y);
+
+endmodule
+
+module testbench01();
+    logic x,y, cin, sum, cout;
+    fulladder test(x,y, cin, sum, cout);
+    initial begin
+    x = 0; y = 0; cin = 0; #10;
+    x = 0; y = 0; cin = 1; #10;
+    x = 0; y = 1; cin = 0; #10;
+    x = 0; y = 1; cin = 1; #10;
+    x = 1; y = 0; cin = 0; #10;
+    x = 1; y = 0; cin = 1; #10;
+    x = 1; y = 1; cin = 0; #10;
+    x = 1; y = 1; cin = 1; #10;
+    end
+
+
+endmodule
+
+`timescale 1ns / 1ps
+
+module xor2(input logic x, y, output logic z);
+assign z = x ^ y;
+endmodule
+
+module or2(input logic x,y, output logic z);
+assign z = x | y;
+endmodule
+
+module and2(input logic x,y, output logic z);
+assign z = x & y;
+endmodule
+
+module fulladderst(input logic x, y, cin, output logic sum, cout);
+    logic a, b, c;
+    xor2 xorfirst(x, y, a);
+    xor2 xorsecond(a, cin, sum);
+    and2 andfirst(x, y, b);
+    and2 andsecond(a, cin, c);
+    or2 orfirst(b, c, cout);
+endmodule
+
+module testbench02();
+    logic x,y, cin, sum, cout;
+    fulladderst test(x,y, cin, sum, cout);
+    initial begin
+    x = 0; y = 0; cin = 0; #10;
+    x = 0; y = 0; cin = 1; #10;
+    x = 0; y = 1; cin = 0; #10;
+    x = 0; y = 1; cin = 1; #10;
+    x = 1; y = 0; cin = 0; #10;
+    x = 1; y = 0; cin = 1; #10;
+    x = 1; y = 1; cin = 0; #10;
+    x = 1; y = 1; cin = 1; #10;
+    end
+
+
+endmodule
+
+module twobitadder(input logic a0, b0, cin0, a1, b1, output logic sum0, sum1, cout1);
+    logic cout0;
+    fulladderst first(a0, b0, cin0, sum0, cout0);
+    fulladderst second(a1, b1, cout0, sum1, cout1);
+endmodule
+
+module testbench03();
+    logic a0, b0, cin0, a1, b1, sum0, sum1, cout1;
+    twobitadder twobitadder(a0, b0, cin0, a1, b1, sum0, sum1, cout1);
+    initial begin
+    a0 = 0; b0 = 0; cin0= 0; a1= 0; b1= 0; #10;
+    a0 = 0; b0 = 0; cin0= 0; a1= 0; b1= 1; #10;
+    a0 = 0; b0 = 0; cin0= 0; a1= 1; b1= 0; #10;
+    a0 = 0; b0 = 0; cin0= 0; a1= 1; b1= 1; #10;
+    a0 = 0; b0 = 0; cin0= 1; a1= 0; b1= 0; #10;
+    a0 = 0; b0 = 0; cin0= 1; a1= 0; b1= 1; #10;
+    a0 = 0; b0 = 0; cin0= 1; a1= 1; b1= 0; #10;
+    a0 = 0; b0 = 0; cin0= 1; a1= 1; b1= 1; #10;
+    a0 = 0; b0 = 1; cin0= 0; a1= 0; b1= 0; #10;
+    a0 = 0; b0 = 1; cin0= 0; a1= 0; b1= 1; #10;
+    a0 = 0; b0 = 1; cin0= 0; a1= 1; b1= 0; #10;
+    a0 = 0; b0 = 1; cin0= 0; a1= 1; b1= 1; #10;
+    a0 = 0; b0 = 1; cin0= 1; a1= 0; b1= 0; #10;
+    a0 = 0; b0 = 1; cin0= 1; a1= 0; b1= 1; #10;
+    a0 = 0; b0 = 1; cin0= 1; a1= 1; b1= 0; #10;
+    a0 = 0; b0 = 1; cin0= 1; a1= 1; b1= 1; #10;
+    a0 = 1; b0 = 0; cin0= 0; a1= 0; b1= 0; #10;
+    a0 = 1; b0 = 0; cin0= 0; a1= 0; b1= 1; #10;
+    a0 = 1; b0 = 0; cin0= 0; a1= 1; b1= 0; #10;
+    a0 = 1; b0 = 0; cin0= 0; a1= 1; b1= 1; #10;
+    a0 = 1; b0 = 0; cin0= 1; a1= 0; b1= 0; #10;
+    a0 = 1; b0 = 0; cin0= 1; a1= 0; b1= 1; #10;
+    a0 = 1; b0 = 0; cin0= 1; a1= 1; b1= 0; #10;
+    a0 = 1; b0 = 0; cin0= 1; a1= 1; b1= 1; #10;
+    a0 = 1; b0 = 1; cin0= 0; a1= 0; b1= 0; #10;
+    a0 = 1; b0 = 1; cin0= 0; a1= 0; b1= 1; #10;
+    a0 = 1; b0 = 1; cin0= 0; a1= 1; b1= 0; #10;
+    a0 = 1; b0 = 1; cin0= 0; a1= 1; b1= 1; #10;
+    a0 = 1; b0 = 1; cin0= 1; a1= 0; b1= 0; #10;
+    a0 = 1; b0 = 1; cin0= 1; a1= 0; b1= 1; #10;
+    a0 = 1; b0 = 1; cin0= 1; a1= 1; b1= 0; #10;
+    a0 = 1; b0 = 1; cin0= 1; a1= 1; b1= 1; #10;
+    end
+endmodule
